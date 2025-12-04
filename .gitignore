@@ -1,0 +1,114 @@
+# -----------------------
+# Miscellaneous & OS
+# -----------------------
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -----------------------
+# Firebase Related (Requested)
+# -----------------------
+# Android configuration file (contains project ID/API keys)
+google-services.json
+
+# iOS configuration file
+GoogleService-Info.plist
+
+# Firebase Hosting/Emulator cache
+.firebase/
+
+# Firebase log files
+firebase-debug.log
+
+# If you use Cloud Functions (Node.js)
+functions/node_modules/
+functions/.env
+functions/coverage/
+
+# -----------------------
+# Security & Environmental (Critical)
+# -----------------------
+# Never commit API keys or local environment settings
+.env
+.env.*
+*.jks
+*.keystore
+key.properties
+
+# -----------------------
+# IntelliJ / Android Studio
+# -----------------------
+*.iml
+*.ipr
+*.iws
+.idea/
+modules.xml
+
+# -----------------------
+# VS Code
+# -----------------------
+.vscode/
+
+# -----------------------
+# Flutter/Dart/Pub
+# -----------------------
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# -----------------------
+# Android
+# -----------------------
+/android/app/debug
+/android/app/profile
+/android/app/release
+/android/app/build
+/android/build
+/android/.gradle
+/android/local.properties
+/android/flutter_plugins.tar
+
+# -----------------------
+# iOS
+# -----------------------
+/ios/Flutter/.last_build_id
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/app.flx
+/ios/Flutter/app.zip
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+
+# CocoaPods (If you use plugins)
+/ios/Pods/
+/ios/.symlinks/
+/ios/Podfile.lock
+
+# -----------------------
+# Web
+# -----------------------
+lib/generated_plugin_registrant.dart
+
+# -----------------------
+# Symbolication & Obfuscation
+# -----------------------
+app.*.symbols
+app.*.map.json
