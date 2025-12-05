@@ -11,9 +11,6 @@ class MovieProvider with ChangeNotifier {
   List<Movie> _popularMovies = [];
   bool _isPopularLoading = false;
 
-  List<Movie> _upcomingMovies = [];
-  bool _isUpcomingLoading = false;
-
   // Section: Latest / Main Grid (Vertical Infinite Scroll)
   List<Movie> _movies = [];
   bool _isLoading = false;
@@ -25,9 +22,6 @@ class MovieProvider with ChangeNotifier {
   // --- 2. GETTERS ---
   List<Movie> get popularMovies => _popularMovies;
   bool get isPopularLoading => _isPopularLoading;
-
-  List<Movie> get upcomingMovies => _upcomingMovies;
-  bool get isUpcomingLoading => _isUpcomingLoading;
 
   List<Movie> get movies => _movies; // This is the main grid
   bool get isLoading => _isLoading;
@@ -51,19 +45,6 @@ class MovieProvider with ChangeNotifier {
       print("Popular Load Error: $e"); // Non-critical, just log it
     } finally {
       _isPopularLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchUpcomingMovies() async {
-    _isUpcomingLoading = true;
-    notifyListeners();
-    try {
-      _upcomingMovies = await _apiService.getUpcomingMovies();
-    } catch (e) {
-      print("Upcoming Load Error: $e");
-    } finally {
-      _isUpcomingLoading = false;
       notifyListeners();
     }
   }

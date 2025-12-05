@@ -102,8 +102,8 @@ class YtsMovieCard extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withOpacity(0.6),
-                          Colors.black.withOpacity(0.9),
+                          Colors.black.withAlpha(190),
+                          Colors.black.withAlpha(200),
                         ],
                       ),
                     ),
@@ -182,8 +182,8 @@ class YtsMovieCard extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 4,
+                      vertical: 10,
+                      horizontal: 8,
                     ),
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
@@ -194,13 +194,13 @@ class YtsMovieCard extends StatelessWidget {
                     ),
                     child: Text(
                       movie.title,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.start,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontSize: 15,
                       ),
                     ),
                   ),

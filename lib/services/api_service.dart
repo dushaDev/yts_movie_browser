@@ -55,18 +55,6 @@ class ApiService {
     );
   }
 
-  // --- 2. UPCOMING MOVIES ---
-  // Uses the specific upcoming endpoint
-  Future<List<Movie>> getUpcomingMovies() async {
-    try {
-      return await _fetchMoviesFromUrl(AppConstants.listUpcomingEndpoint);
-    } catch (e) {
-      // Upcoming endpoint is often unstable on YTS.
-      // Return empty list instead of crashing app if it fails.
-      return [];
-    }
-  }
-
   // --- 3. LATEST MOVIES / SEARCH / FILTER (Main Grid) ---
   // This is the main workhorse function.
   // It handles pagination, search queries, and filters all in one.

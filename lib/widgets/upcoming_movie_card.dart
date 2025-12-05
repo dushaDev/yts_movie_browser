@@ -46,7 +46,7 @@ class UpcomingMovieCard extends StatelessWidget {
                 color: activeColor.withAlpha(80),
                 blurRadius: 20,
                 spreadRadius: 0,
-              )
+              ),
           ],
         ),
         child: ClipRRect(
@@ -67,8 +67,10 @@ class UpcomingMovieCard extends StatelessWidget {
                   // Optional: Color filter to make upcoming movies look slightly different
                   color: isSelected ? null : Colors.black.withOpacity(0.2),
                   colorBlendMode: BlendMode.darken,
-                  placeholder: (context, url) => Container(color: const Color(0xFF212121)),
-                  errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.grey),
+                  placeholder: (context, url) =>
+                      Container(color: const Color(0xFF212121)),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, color: Colors.grey),
                 ),
               ),
 
@@ -79,12 +81,19 @@ class UpcomingMovieCard extends StatelessWidget {
                 top: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: activeColor, // Gold background
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: const [
-                      BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
                     ],
                   ),
                   child: Text(
@@ -124,7 +133,11 @@ class UpcomingMovieCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // No Star Rating for upcoming
-                        const Icon(Icons.access_time_filled, color: Colors.white70, size: 32),
+                        const Icon(
+                          Icons.access_time_filled,
+                          color: Colors.white70,
+                          size: 32,
+                        ),
                         const SizedBox(height: 8),
 
                         Text(
@@ -164,9 +177,9 @@ class UpcomingMovieCard extends StatelessWidget {
                             child: Text(
                               "Not Yet Available",
                               style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold
+                                color: Colors.white70,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -188,7 +201,10 @@ class UpcomingMovieCard extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 4,
+                    ),
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
