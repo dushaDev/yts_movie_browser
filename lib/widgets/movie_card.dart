@@ -6,7 +6,11 @@ class MovieCard extends StatelessWidget {
   final Movie movie;
   final VoidCallback? onTap;
 
-  const MovieCard({super.key, required this.movie, this.onTap});
+  const MovieCard({
+    super.key,
+    required this.movie,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +29,7 @@ class MovieCard extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: movie.mediumCoverImage,
               fit: BoxFit.cover,
-              placeholder: (context, url) =>
-                  Container(color: colorScheme.surface),
+              placeholder: (context, url) => Container(color: colorScheme.surface),
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
 
@@ -55,9 +58,7 @@ class MovieCard extends StatelessWidget {
                       movie.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                      ),
+                      style: textTheme.titleMedium?.copyWith(color: Colors.white),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -67,18 +68,15 @@ class MovieCard extends StatelessWidget {
                         Text(
                           "${movie.rating}",
                           style: TextStyle(
-                            color: colorScheme.tertiary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                              color: colorScheme.tertiary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12
                           ),
                         ),
                         const Spacer(),
                         Text(
                           "${movie.year}",
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                          ),
+                          style: const TextStyle(color: Colors.white70, fontSize: 12),
                         ),
                       ],
                     ),
