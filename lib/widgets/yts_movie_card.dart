@@ -217,7 +217,7 @@ class YtsMovieCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.6),
+        color: Colors.black.withAlpha(160),
         border: Border.all(color: Colors.white30, width: 0.5),
         borderRadius: BorderRadius.circular(4),
       ),

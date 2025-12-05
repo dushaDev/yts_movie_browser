@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/movie_provider.dart';
+import '../widgets/shimmer_loading.dart';
 import '../widgets/upcoming_movie_card.dart';
 import '../widgets/yts_movie_card.dart';
 
@@ -72,112 +73,114 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         // actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
       ),
-      body: GestureDetector(
-        onTap: () => setState(() => _activeMovieId = null),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            // --- SECTION 1: POPULAR HEADER ---
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
-                child: Row(
-                  children: [
-                    Icon(Icons.star, color: theme.colorScheme.tertiary),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Popular Downloads",
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await provider.loadHomePageData();
+        },
+        child: GestureDetector(
+          onTap: () => setState(() => _activeMovieId = null),
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              // --- SECTION 1: POPULAR HEADER ---
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+                  child: Row(
+                    children: [
+                      Icon(Icons.star, color: theme.colorScheme.tertiary),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Popular Downloads",
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // --- SECTION 2: POPULAR LIST (Horizontal) ---
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 220, // Height for card + title
-                child: provider.isPopularLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        itemCount: provider.popularMovies.length,
-                        itemBuilder: (context, index) {
-                          final movie = provider.popularMovies[index];
-                          // Simple ID check for this horizontal list
-                          final isSelected = _activeMovieId == movie.id;
-
-                          return Container(
-                            width: 140, // Fixed width for horizontal items
-                            margin: const EdgeInsets.only(right: 10),
-                            child: YtsMovieCard(
-                              movie: movie,
-                              isSelected: isSelected,
-                              onCardTap: () => setState(
-                                () => _activeMovieId = isSelected
-                                    ? null
-                                    : movie.id,
-                              ),
-                              onDetailsTap: () {},
-                            ),
-                          );
-                        },
-                      ),
-              ),
-            ),
-            // --- SECTION 3: LATEST HEADER ---
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
-                child: Text(
-                  "Latest Movies",
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    ],
                   ),
                 ),
               ),
-            ),
 
-            // --- SECTION 4: MAIN GRID (Vertical) ---
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200,
-                  childAspectRatio: 2 / 3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+              // --- SECTION 2: POPULAR LIST (Horizontal) ---
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 220, // Height for card + title
+                  child: provider.isPopularLoading
+                      ? const PopularShimmer()
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          itemCount: provider.popularMovies.length,
+                          itemBuilder: (context, index) {
+                            final movie = provider.popularMovies[index];
+                            // Simple ID check for this horizontal list
+                            final isSelected = _activeMovieId == movie.id;
+
+                            return Container(
+                              width: 140, // Fixed width for horizontal items
+                              margin: const EdgeInsets.only(right: 10),
+                              child: YtsMovieCard(
+                                movie: movie,
+                                isSelected: isSelected,
+                                onCardTap: () => setState(
+                                  () => _activeMovieId = isSelected
+                                      ? null
+                                      : movie.id,
+                                ),
+                                onDetailsTap: () {},
+                              ),
+                            );
+                          },
+                        ),
                 ),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final movie = provider.movies[index];
-                  final isSelected = _activeMovieId == movie.id;
-
-                  return YtsMovieCard(
-                    movie: movie,
-                    isSelected: isSelected,
-                    onCardTap: () => setState(
-                      () => _activeMovieId = isSelected ? null : movie.id,
-                    ),
-                    onDetailsTap: () {},
-                  );
-                }, childCount: provider.movies.length),
               ),
-            ),
+              // --- SECTION 3: LATEST HEADER ---
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
+                  child: Text(
+                    "Latest Movies",
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
 
-            // --- SECTION 5: BOTTOM LOADER ---
-            SliverToBoxAdapter(
-              child: provider.isLoading
-                  ? const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : const SizedBox(height: 80), // Bottom padding
-            ),
-          ],
+              // --- SECTION 4: MAIN GRID (Vertical) ---
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 2 / 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final movie = provider.movies[index];
+                    final isSelected = _activeMovieId == movie.id;
+
+                    return YtsMovieCard(
+                      movie: movie,
+                      isSelected: isSelected,
+                      onCardTap: () => setState(
+                        () => _activeMovieId = isSelected ? null : movie.id,
+                      ),
+                      onDetailsTap: () {},
+                    );
+                  }, childCount: provider.movies.length),
+                ),
+              ),
+
+              // --- SECTION 5: BOTTOM LOADER ---
+              SliverToBoxAdapter(
+                child: provider.isLoading
+                    ? const LatestShimmer()
+                    : const SizedBox(height: 80), // Bottom padding
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yts_movie_browser/theme/theme.dart' as AppTheme;
+import 'package:yts_movie_browser/theme/theme.dart';
 import 'providers/movie_provider.dart';
 import 'screens/main_wrapper.dart';
 
@@ -24,10 +24,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'YTS Browser',
-
-      // Apply the Material 3 Themes we created
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: lightTheme,
+      darkTheme: darkTheme,
 
       // Automatically switch based on phone settings (Dark/Light)
       themeMode: ThemeMode.system,
