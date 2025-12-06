@@ -5,15 +5,21 @@ import '../models/movie.dart';
 class YtsMovieCard extends StatelessWidget {
   final Movie movie;
   final bool isSelected;
+  final IconData savedIcon;
+  final Color savedColor;
   final VoidCallback onCardTap;
   final VoidCallback onDetailsTap;
+  final VoidCallback onSaveTap;
 
   const YtsMovieCard({
     super.key,
     required this.movie,
     required this.isSelected,
+    required this.savedIcon,
+    required this.savedColor,
     required this.onCardTap,
     required this.onDetailsTap,
+    required this.onSaveTap,
   });
 
   @override
@@ -22,7 +28,7 @@ class YtsMovieCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     // ANIMATION CONFIGURATION
-    const duration = Duration(milliseconds: 850); // Slower, smoother time
+    const duration = Duration(milliseconds: 800); // Slower, smoother time
     const curve = Curves.easeOutCubic; // Starts fast, slows down gently
 
     final borderSide = BorderSide(
@@ -146,23 +152,63 @@ class YtsMovieCard extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: onDetailsTap,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: colorScheme.primary,
-                              foregroundColor: colorScheme.onPrimary,
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                        Row(
+                          children: [
+                            // View Details Button (Expanded)
+                            Expanded(
+                              child: SizedBox(
+                                height: 40,
+                                child: ElevatedButton(
+                                  onPressed: onDetailsTap,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: colorScheme.primary,
+                                    foregroundColor: colorScheme.onPrimary,
+                                    padding: EdgeInsets.zero, // Compact text
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 5.0,
+                                    ),
+                                    child: const Text(
+                                      "View Details",
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            child: const Text(
-                              "View Details",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+
+                            const SizedBox(width: 8),
+
+                            // Save Button (Icon Only)
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(
+                                  70,
+                                ), // Glass effect
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  savedIcon,
+                                  color: savedColor,
+                                  size: 20,
+                                ),
+                                onPressed:
+                                    onSaveTap, // <--- Call the save function
+                                padding: EdgeInsets.zero,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -173,34 +219,37 @@ class YtsMovieCard extends StatelessWidget {
               // -------------------------------
               // LAYER 4: Title (Fade Out)
               // -------------------------------
-              AnimatedOpacity(
-                opacity: isSelected ? 0.0 : 1.0,
-                duration: duration,
-                curve: curve,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 8,
-                    ),
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black],
+              IgnorePointer(
+                ignoring: isSelected,
+                child: AnimatedOpacity(
+                  opacity: isSelected ? 0.0 : 1.0,
+                  duration: duration,
+                  curve: curve,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 8,
                       ),
-                    ),
-                    child: Text(
-                      movie.title,
-                      textAlign: TextAlign.start,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black],
+                        ),
+                      ),
+                      child: Text(
+                        movie.title,
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),

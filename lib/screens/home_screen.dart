@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startapp_sdk/startapp.dart';
+import '../models/enum/enum_message_type.dart';
 import '../providers/movie_provider.dart';
+import '../services/snackbar_service.dart';
 import '../widgets/shimmer_loading.dart';
-import '../widgets/upcoming_movie_card.dart';
 import '../widgets/yts_movie_card.dart';
+import 'movie_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,20 +18,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   int? _activeMovieId;
+  var startAppSdk = StartAppSdk();
+  StartAppBannerAd? bannerAd;
 
   @override
   void initState() {
     super.initState();
 
     // 1. Setup Scroll Listener
-    _scrollController.addListener(() {
+    _scrollController.addListener(() async {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
         // We can look up provider here without issues because it's an event callback
         final provider = Provider.of<MovieProvider>(context, listen: false);
-        if (!provider.isLoading) {
-          provider.getMovies();
-        }
+        await provider.getMovies();
       }
     });
 
@@ -40,7 +43,26 @@ class _HomeScreenState extends State<HomeScreen> {
       if (provider.movies.isEmpty) {
         provider.loadHomePageData();
       }
+      provider.loadSavedMovies();
     });
+
+    // TODO make sure to comment out this line before release
+    // startAppSdk.setTestAdsEnabled(true);
+
+    // TODO use one of the following types: BANNER, MREC, COVER
+    startAppSdk
+        .loadBannerAd(StartAppBannerType.BANNER)
+        .then((bannerAd) {
+          setState(() {
+            this.bannerAd = bannerAd;
+          });
+        })
+        .onError<StartAppException>((ex, stackTrace) {
+          debugPrint("Error loading Banner ad: ${ex.message}");
+        })
+        .onError((error, stackTrace) {
+          debugPrint("Error loading Banner ad: $error");
+        });
   }
 
   @override
@@ -53,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final provider = Provider.of<MovieProvider>(context);
     final theme = Theme.of(context);
+    ColorScheme colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -116,18 +139,51 @@ class _HomeScreenState extends State<HomeScreen> {
                             // Simple ID check for this horizontal list
                             final isSelected = _activeMovieId == movie.id;
 
+                            final isSaved = provider.isMovieSaved(movie.id);
+
                             return Container(
                               width: 140, // Fixed width for horizontal items
                               margin: const EdgeInsets.only(right: 10),
                               child: YtsMovieCard(
                                 movie: movie,
                                 isSelected: isSelected,
+                                savedIcon: isSaved
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                savedColor: isSaved
+                                    ? colors.tertiary
+                                    : Colors.white,
                                 onCardTap: () => setState(
                                   () => _activeMovieId = isSelected
                                       ? null
                                       : movie.id,
                                 ),
-                                onDetailsTap: () {},
+                                onDetailsTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MovieDetailScreen(
+                                        initialMovie: movie,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                onSaveTap: () {
+                                  provider.toggleSave(movie);
+                                  if (!isSaved) {
+                                    SnackbarService.show(
+                                      context,
+                                      'Added to Wishlist',
+                                      type: MessageType.success,
+                                    );
+                                  } else {
+                                    SnackbarService.show(
+                                      context,
+                                      'Removed from Wishlist',
+                                      type: MessageType.success,
+                                    );
+                                  }
+                                },
                               ),
                             );
                           },
@@ -135,6 +191,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               // --- SECTION 3: LATEST HEADER ---
+              SliverToBoxAdapter(
+                child: bannerAd != null
+                    ? SizedBox(
+                        height: 50, // Standard Banner Height
+                        width: 300, // Standard Banner Width
+                        child: StartAppBanner(bannerAd!),
+                      )
+                    : Container(),
+              ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
@@ -160,14 +225,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final movie = provider.movies[index];
                     final isSelected = _activeMovieId == movie.id;
+                    final isSaved = provider.isMovieSaved(movie.id);
 
                     return YtsMovieCard(
                       movie: movie,
                       isSelected: isSelected,
+                      savedIcon: isSaved
+                          ? Icons.bookmark
+                          : Icons.bookmark_border,
+                      savedColor: isSaved ? colors.tertiary : Colors.white,
                       onCardTap: () => setState(
                         () => _activeMovieId = isSelected ? null : movie.id,
                       ),
-                      onDetailsTap: () {},
+                      onDetailsTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MovieDetailScreen(initialMovie: movie),
+                          ),
+                        );
+                      },
+                      onSaveTap: () {
+                        provider.toggleSave(movie);
+                        if (!isSaved) {
+                          SnackbarService.show(
+                            context,
+                            'Added to Wishlist',
+                            type: MessageType.success,
+                          );
+                        } else {
+                          SnackbarService.show(
+                            context,
+                            'Removed from Wishlist',
+                            type: MessageType.success,
+                          );
+                        }
+                      },
                     );
                   }, childCount: provider.movies.length),
                 ),

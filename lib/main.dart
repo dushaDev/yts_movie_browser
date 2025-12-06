@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yts_movie_browser/screens/wrappers/connection_wrapper.dart';
 import 'package:yts_movie_browser/theme/theme.dart';
 import 'providers/movie_provider.dart';
-import 'screens/main_wrapper.dart';
+import 'screens/wrappers/main_wrapper.dart';
 
 void main() {
   runApp(
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'YTS Browser',
+      title: 'YTS Movie Browser',
       theme: lightTheme,
       darkTheme: darkTheme,
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
 
       // Start the app at the Wrapper (which contains the Floating Bar)
-      home: const MainWrapper(),
+      home: ConnectionWrapper(child: const MainWrapper()),
     );
   }
 }

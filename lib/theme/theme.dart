@@ -6,18 +6,19 @@ import 'package:google_fonts/google_fonts.dart';
 // -----------------------------------------------------------------
 class MovieColors {
   // --- BASE ACCENT: NEON GREEN (Primary) ---
-  static const Color greenLight = Color(0xFF2E6F40); // Vivid Green
-  static const Color greenDark = Color(0xFF68BA7F);  // Neon Mint Green
+  static const Color greenLight = Color(0xFF4EAA65); // Vivid Green
+  static const Color greenDark = Color(0xFF49A164); // Neon Mint Green
 
   // --- BASE NEUTRAL: PURE BLACK / GREY (Secondary/Background) ---
   static const Color blackPure = Color(0xFF000000);
   static const Color blackSurface = Color(0xFF121212);
+  static const Color greenSurface = Color(0xFF252C25);
   static const Color greyDark = Color(0xFF212121);
   static const Color greyLight = Color(0xFFF5F5F5);
 
   // --- BASE ACCENT: ORANGE-YELLOW (Tertiary/Stars/Highlights) ---
   static const Color amberLight = Color(0xFFFFAB00); // Deep Amber
-  static const Color amberDark = Color(0xFFFFD740);  // Bright Gold
+  static const Color amberDark = Color(0xFFFFD740); // Bright Gold
 
   // --- VARIANT: GREEN ---
   static const Color greenLowestLight = Color(0xFFDAF4DB);
@@ -75,6 +76,7 @@ final ThemeData lightTheme = ThemeData(
     surfaceContainer: MovieColors.greyLight, // Card Backgrounds
     surfaceContainerHighest: Color(0xFFE0E0E0), // Dividers/Inputs
     onSurfaceVariant: Color(0xFF424242), // Subtitles
+    surfaceBright: MovieColors.greenSurface, //for app bar(custom)
 
     outline: Color(0xFF757575),
   ),
@@ -141,7 +143,7 @@ final ThemeData darkTheme = ThemeData(
   colorScheme: const ColorScheme.dark(
     // PRIMARY: Neon Green (Pop against black)
     primary: MovieColors.greenDark,
-    onPrimary: MovieColors.blackPure, // Black text on neon green
+    onPrimary: Colors.white, // Black text on neon green
     primaryContainer: MovieColors.greenLowDark,
     onPrimaryContainer: MovieColors.greenDark,
 
@@ -156,8 +158,8 @@ final ThemeData darkTheme = ThemeData(
     onTertiary: MovieColors.blackPure,
 
     // ERROR
-    error: Color(0xFFFFB4AB),
-    onError: Color(0xFF690005),
+    error: Color(0xFFCA1A00),
+    onError: Color(0xFFFFFFFF),
 
     // SURFACES (Deep Black/Grey)
     surface: MovieColors.blackSurface, // #121212
@@ -165,6 +167,7 @@ final ThemeData darkTheme = ThemeData(
     surfaceContainer: MovieColors.greyDark, // #212121 (Cards)
     surfaceContainerHighest: Color(0xFF424242), // Dividers
     onSurfaceVariant: Color(0xFFBDBDBD), // Subtitles
+    surfaceBright: MovieColors.greenSurface, //for app bar(custom)
 
     outline: Color(0xFF616161),
   ),

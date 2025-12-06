@@ -22,7 +22,7 @@ class PopularShimmer extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            itemCount: 3,
+            itemCount: 4,
             itemBuilder: (_, __) => Padding(
               padding: const EdgeInsets.only(right: 10),
               // We wrap each card individually to ensure sharp edges
@@ -47,32 +47,34 @@ class LatestShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 4,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 2 / 3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemBuilder: (_, __) => Shimmer.fromColors(
-              baseColor: _baseColor,
-              highlightColor: _highlightColor,
-              child: _buildDetailedCardPlaceholder(
-                width: double.infinity,
-                height: double.infinity,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 7,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 2 / 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (_, __) => Shimmer.fromColors(
+                baseColor: _baseColor,
+                highlightColor: _highlightColor,
+                child: _buildDetailedCardPlaceholder(
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

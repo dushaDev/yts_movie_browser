@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../constants.dart';
 import '../models/movie.dart';
+import 'network_service.dart';
 
 class ApiService {
   final Dio _dio = Dio();
@@ -36,8 +37,6 @@ class ApiService {
         throw Exception('API responded with error: ${response.statusMessage}');
       }
     } catch (e) {
-      // You can add better error logging here
-      print("API Error: $e");
       rethrow;
     }
   }
@@ -100,5 +99,51 @@ class ApiService {
       AppConstants.movieSuggestionsEndpoint,
       params: {'movie_id': movieId},
     );
+  }
+
+  Future<Movie> getMovieDetail(int movieId) async {
+    // 1. Use the helper to fetch the raw response
+    final response = await _fetchFromEndpoint(
+      AppConstants.movieDetailsEndpoint,
+      {
+        'movie_id': movieId,
+        'with_images': 'true', // Fetch background images
+        'with_cast': 'true', // Fetch actor info
+      },
+    );
+
+    // 2. Parse the specific JSON structure for details
+    // The structure is: { status: "ok", data: { movie: { ... } } }
+    return Movie.fromJson(response.data['data']['movie']);
+  }
+
+  // --- GENERIC HELPER METHOD ---
+  // This performs the actual network request.
+  // It handles the URL construction and basic error checking.
+  Future<Response> _fetchFromEndpoint(
+    String endpoint,
+    Map<String, dynamic>? params,
+  ) async {
+    // 1. CHECK CONNECTION FIRST
+    if (!await NetworkService().isConnected) {
+      throw Exception("No Internet Connection");
+    }
+    try {
+      final response = await _dio.get(
+        '${AppConstants.baseUrl}$endpoint',
+        queryParameters: params,
+      );
+
+      // Basic success check
+      if (response.statusCode == 200 && response.data['status'] == 'ok') {
+        return response;
+      } else {
+        // If the API says "error" or the status isn't 200
+        throw Exception('API Error: ${response.statusMessage}');
+      }
+    } catch (e) {
+      // Log the error and rethrow it so the UI knows something went wrong
+      throw Exception('Network Error: $e');
+    }
   }
 }

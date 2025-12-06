@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'search_screen.dart';
-import 'saved_screen.dart';
+import '../home_screen.dart';
+import '../search_screen.dart';
+import '../saved_screen.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({super.key});
