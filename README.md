@@ -1,7 +1,5 @@
 # YTS Browser - Native Flutter App
 
-![YTS Browser Banner](assets/images/yts_logo.png)
-
 > **A fast, clean, and ad-free native Android browser for the YTS movie network.**
 > *Built with Flutter & Dart by **dushaDev**.*
 
@@ -113,3 +111,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 * **GitHub:** [github.com/dushaDev](https://github.com)
 * **Email:** dushaDev@example.com
+
