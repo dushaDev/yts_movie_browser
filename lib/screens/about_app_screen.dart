@@ -75,7 +75,7 @@ class AboutAppScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                "Version 1.0.0", // Beta removed
+                "Version 1.0.1", // Beta removed
                 style: TextStyle(
                   color: colorScheme.onPrimaryContainer,
                   fontSize: 12,

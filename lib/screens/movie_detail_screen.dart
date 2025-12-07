@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:startapp_sdk/startapp.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +32,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
   var startAppSdk = StartAppSdk();
   StartAppBannerAd? topBannerAd;
   StartAppBannerAd? bottomBannerAd;
+  StartAppRewardedVideoAd? rewardedVideoAd;
 
   // 2. Variable to track the state
   bool _isSliverAppBarExpanded = false;
@@ -66,7 +68,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     // TODO make sure to comment out this line before release
     // startAppSdk.setTestAdsEnabled(true);
 
-    // TODO use one of the following types: BANNER, MREC, COVER
+    loadRewardedVideoAd();
     startAppSdk
         .loadBannerAd(StartAppBannerType.BANNER)
         .then((bannerAd) {
@@ -81,7 +83,6 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           debugPrint("Error loading Banner ad: $error");
         });
 
-    // TODO use one of the following types: BANNER, MREC, COVER
     startAppSdk
         .loadBannerAd(StartAppBannerType.MREC)
         .then((bannerAd) {
@@ -97,6 +98,54 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         });
   }
 
+  void loadRewardedVideoAd() {
+    startAppSdk
+        .loadRewardedVideoAd(
+          onAdNotDisplayed: () {
+            debugPrint('onAdNotDisplayed: rewarded video');
+
+            setState(() {
+              // NOTE rewarded video ad can be shown only once
+              this.rewardedVideoAd?.dispose();
+              this.rewardedVideoAd = null;
+            });
+          },
+          onAdHidden: () {
+            debugPrint('onAdHidden: rewarded video');
+
+            setState(() {
+              // NOTE rewarded video ad can be shown only once
+              this.rewardedVideoAd?.dispose();
+              this.rewardedVideoAd = null;
+            });
+          },
+          onVideoCompleted: () {
+            debugPrint(
+              'onVideoCompleted: rewarded video completed, user gain a reward',
+            );
+
+            setState(() {
+              SnackbarService.show(
+                context,
+                'Thankyou for about watching the ad!',
+                type: MessageType.info,
+              );
+            });
+          },
+        )
+        .then((rewardedVideoAd) {
+          setState(() {
+            this.rewardedVideoAd = rewardedVideoAd;
+          });
+        })
+        .onError((ex, stackTrace) {
+          debugPrint("Error loading Rewarded Video ad");
+        })
+        .onError((error, stackTrace) {
+          debugPrint("Error loading Rewarded Video ad: $error");
+        });
+  }
+
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -109,6 +158,19 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           type: MessageType.info,
         );
       }
+    }
+  }
+
+  // copy to clipboard use to copy movie title in this page.
+  Future<void> _copyToClipboard(String copyText) async {
+    await Clipboard.setData(ClipboardData(text: copyText));
+
+    if (mounted) {
+      SnackbarService.show(
+        context,
+        "Title Copied to Clipboard",
+        type: MessageType.success,
+      );
     }
   }
 
@@ -239,6 +301,19 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                                       'Added to Wishlist',
                                       type: MessageType.success,
                                     );
+
+                                    /// TODO rewarded ad here
+                                    if (rewardedVideoAd != null) {
+                                      rewardedVideoAd!.show().onError((
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        debugPrint(
+                                          "Error showing Rewarded Video ad: $error",
+                                        );
+                                        return false;
+                                      });
+                                    }
                                   } else {
                                     SnackbarService.show(
                                       context,
@@ -272,12 +347,23 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                         children: [
                           // TITLE & META
                           Center(
-                            child: Text(
-                              movie.title,
-                              textAlign: TextAlign.center,
-                              style: textTheme.headlineMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: colors.onSurface,
+                            child: GestureDetector(
+                              onTap: () {
+                                //give info message to user can copy headline using snackbar
+                                SnackbarService.show(
+                                  context,
+                                  "Long Press to Copy Title",
+                                  type: MessageType.info,
+                                );
+                              },
+                              onLongPress: () => _copyToClipboard(movie.title),
+                              child: Text(
+                                movie.title,
+                                textAlign: TextAlign.center,
+                                style: textTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colors.onSurface,
+                                ),
                               ),
                             ),
                           ),
@@ -303,7 +389,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                               const SizedBox(width: 12),
                               Icon(
                                 Icons.star,
-                                size: 20,
+                                size: 24,
                                 color: colors.tertiary,
                               ),
                               const SizedBox(width: 4),
@@ -385,7 +471,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          // TOP BANNER
+
+                          /// TODO TOP BANNER here
                           topBannerAd != null
                               ? SizedBox(
                                   height: 50, // Standard Banner Height
@@ -450,6 +537,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                             ),
                             const SizedBox(height: 10),
                           ],
+
+                          /// TODO BOTTOM BANNER here
                           bottomBannerAd != null
                               ? SizedBox(
                                   height: 250, // Standard Banner Height
@@ -634,10 +723,11 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           // 3. Torrent File Button
           IconButton(
             onPressed: () => _launchURL(t.url),
-            icon: const Icon(Icons.file_download_outlined),
+            icon: const Icon(Icons.file_download_outlined, size: 28),
             color: colors.onSurface.withAlpha(200),
             tooltip: "Download Torrent File",
           ),
+          const SizedBox(width: 10),
 
           // 4. Magnet Link Button
           IconButton(

@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO make sure to comment out this line before release
     // startAppSdk.setTestAdsEnabled(true);
 
-    // TODO use one of the following types: BANNER, MREC, COVER
     startAppSdk
         .loadBannerAd(StartAppBannerType.BANNER)
         .then((bannerAd) {
@@ -145,6 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 140, // Fixed width for horizontal items
                               margin: const EdgeInsets.only(right: 10),
                               child: YtsMovieCard(
+                                isShortText:
+                                    true, //use to sort button text from 'view details' to 'view'
                                 movie: movie,
                                 isSelected: isSelected,
                                 savedIcon: isSaved
@@ -192,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               // --- SECTION 3: LATEST HEADER ---
               SliverToBoxAdapter(
+                // TODO BANNER AD here
                 child: bannerAd != null
                     ? SizedBox(
                         height: 50, // Standard Banner Height
@@ -203,11 +205,17 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
-                  child: Text(
-                    "Latest Movies",
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.movie, color: theme.colorScheme.tertiary),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Latest Movies",
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

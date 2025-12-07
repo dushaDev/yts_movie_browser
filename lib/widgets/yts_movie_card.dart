@@ -10,6 +10,7 @@ class YtsMovieCard extends StatelessWidget {
   final VoidCallback onCardTap;
   final VoidCallback onDetailsTap;
   final VoidCallback onSaveTap;
+  final bool isShortText;
 
   const YtsMovieCard({
     super.key,
@@ -20,6 +21,7 @@ class YtsMovieCard extends StatelessWidget {
     required this.onCardTap,
     required this.onDetailsTap,
     required this.onSaveTap,
+    this.isShortText = false,
   });
 
   @override
@@ -172,8 +174,8 @@ class YtsMovieCard extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 5.0,
                                     ),
-                                    child: const Text(
-                                      "View Details",
+                                    child: Text(
+                                      isShortText ? "View" : "View Details",
                                       maxLines: 1,
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
