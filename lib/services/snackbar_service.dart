@@ -43,7 +43,7 @@ class SnackbarService {
         break;
       case MessageType.info:
         // Use secondary color for general info
-        backgroundColor = colorScheme.primary;
+        backgroundColor = Colors.lightBlueAccent;
         textColor = colorScheme.onPrimary;
         iconData = Icons.info_outline_rounded;
         break;
