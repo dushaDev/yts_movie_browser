@@ -176,6 +176,24 @@ class AboutAppScreen extends StatelessWidget {
               ),
             ),
 
+            const SizedBox(height: 16),
+            TextButton.icon(
+              icon: Icon(
+                Icons.privacy_tip_outlined,
+                color: colorScheme.primary,
+              ),
+              label: Text(
+                'Privacy Policy',
+                style: TextStyle(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () => _launchURL(
+                'https://sites.google.com/view/yts-browser-privacy-policy/home',
+              ),
+            ),
+
             const SizedBox(height: 20),
 
             // 5. FOOTER (dushaDev)
