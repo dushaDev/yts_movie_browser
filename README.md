@@ -1,6 +1,6 @@
-# YTS Browser - Native Flutter App
+# YTS Movie Browser - Native Flutter App
 
-> **A fast, clean, and ad-free native Android browser for the YTS movie network.**
+> **A fast, clean and native Android browser for the YTS movie network.**
 > *Built with Flutter & Dart by **dushaDev**.*
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.0%2B-02569B?logo=flutter)](https://flutter.dev)
@@ -35,9 +35,9 @@
 
 ## Screenshots
 
-| Home Feed | Movie Details | Search & Filters |
-|:---:|:---:|:---:|
-| <img src="docs/screenshots/home.png" width="200"> | <img src="docs/screenshots/details.png" width="200"> | <img src="docs/screenshots/search.png" width="200"> |
+|                 Home Feed                 |               Movie Details               |             Search & Filters              |
+|:-----------------------------------------:|:-----------------------------------------:|:-----------------------------------------:|
+| <img src="screenshots/1.png" width="200"> | <img src="screenshots/2.png" width="200"> | <img src="screenshots/3.png" width="200"> |
 
 > *Note: Add your actual screenshots to a `docs/screenshots` folder in your repo.*
 
@@ -62,8 +62,8 @@ This project follows a clean **MVVM (Model-View-ViewModel)** architecture using 
 
 1.  **Clone the repo:**
     ```bash
-    git clone [https://github.com/dushaDev/yts-browser.git](https://github.com/dushaDev/yts-browser.git)
-    cd yts-browser
+    git clone [https://github.com/dushaDev/yts_movie_browser.git](https://github.com/dushaDev/yts_movie_browser.git)
+    cd yts_movie_browser
     ```
 
 2.  **Install dependencies:**
@@ -87,7 +87,7 @@ This project follows a clean **MVVM (Model-View-ViewModel)** architecture using 
 
 **Please Read Carefully:**
 
-1.  **Content:** This application acts solely as a search engine and browser for the public API provided by `yts.mx`.
+1.  **Content:** This application acts solely as a search engine and browser for the public API provided by `yts.ag`.
 2.  **Hosting:** We **do not** host, upload, or manage any video files or media content on our servers.
 3.  **Copyright:** The developer (**dushaDev**) assumes no liability for how this application is used. Users are responsible for ensuring their downloads comply with their local copyright laws.
 
@@ -110,5 +110,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 **dushaDev**
 
 * **GitHub:** [github.com/dushaDev](https://github.com)
-* **Email:** dushaDev@example.com
+* **Email:** dushadevhere@gmail.com
 
