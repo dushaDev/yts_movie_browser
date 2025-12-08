@@ -75,7 +75,7 @@ class AboutAppScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                "Version 1.0.0", // Beta removed
+                "Version 1.0.1", // Beta removed
                 style: TextStyle(
                   color: colorScheme.onPrimaryContainer,
                   fontSize: 12,
@@ -173,6 +173,24 @@ class AboutAppScreen extends StatelessWidget {
               "We do not host any files. This application is purely a search engine/browser for the public YTS API.",
               style: textTheme.bodySmall?.copyWith(
                 color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            TextButton.icon(
+              icon: Icon(
+                Icons.privacy_tip_outlined,
+                color: colorScheme.primary,
+              ),
+              label: Text(
+                'Privacy Policy',
+                style: TextStyle(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () => _launchURL(
+                'https://sites.google.com/view/yts-browser-privacy-policy/home',
               ),
             ),
 
