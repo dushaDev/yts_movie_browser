@@ -39,7 +39,7 @@
 |:-----------------------------------------:|:-----------------------------------------:|:-----------------------------------------:|
 | <img src="screenshots/1.png" width="200"> | <img src="screenshots/2.png" width="200"> | <img src="screenshots/3.png" width="200"> |
 
-> *Note: Add your actual screenshots to a `docs/screenshots` folder in your repo.*
+> *Note: Add your actual screenshots to a `screenshots` folder in your repo.*
 
 ---
 
@@ -111,4 +111,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 * **GitHub:** [github.com/dushaDev](https://github.com)
 * **Email:** dushadevhere@gmail.com
+
 
